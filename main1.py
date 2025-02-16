@@ -1,5 +1,4 @@
 import pandas as pd
-from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 import torch
 import nltk
 
@@ -7,6 +6,7 @@ from retrieve_context import *
 from generate_paraphrases import *
 from evaluation import *
 from format_prompt import *
+from model_tokenizer_load import *
 
 nltk.download('wordnet')
 nltk.download('punkt_tab')
@@ -18,26 +18,9 @@ data_test = pd.read_csv("datasets/test.txt", sep="\t")
 
 from huggingface_hub import login
 
-login(token='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')
+login(token='MY TOKEN HERE')
 
-model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"
-tokenizer_name = 'deepseek-ai/DeepSeek-R1-Distill-Qwen-14B'
-padding_size = 1024
-
-tokenizer = AutoTokenizer.from_pretrained(f'{tokenizer_name}',
-                                          use_auth_token=True,
-                                          model_max_length=padding_size)
-tokenizer.pad_token = tokenizer.bos_token
-tokenizer.padding_side = 'left'
-
-quantization_config = BitsAndBytesConfig(load_in_4bit=True,
-                                         bnb_4bit_compute_dtype=torch.float16,
-                                         bnb_4bit_quant_type='nf4')
-
-model = AutoModelForCausalLM.from_pretrained(f'{model_name}',
-                                             device_map='auto',
-                                             quantization_config=quantization_config,
-                                             offload_folder="./offload")
+model, tokenizer = load_model_and_tokenizer()
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 ground_truths = data_test['Sentence 2'].tolist()
