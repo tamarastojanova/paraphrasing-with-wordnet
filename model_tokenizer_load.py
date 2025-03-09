@@ -3,8 +3,8 @@ import torch
 
 
 def load_model_and_tokenizer():
-    model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"
-    tokenizer_name = 'deepseek-ai/DeepSeek-R1-Distill-Qwen-14B'
+    model_name = "meta-llama/Llama-2-7b-chat-hf"
+    tokenizer_name = 'meta-llama/Llama-2-7b-chat-hf'
     padding_size = 1024
 
     tokenizer = AutoTokenizer.from_pretrained(f'{tokenizer_name}',

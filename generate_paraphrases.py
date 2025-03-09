@@ -6,7 +6,7 @@ def generate_paraphrases(format_function, data, tokenizer, model, device, additi
                          max_new_tokens=100, temperature=0.2):
     paraphrased_sentences = []
 
-    for sentence in data['Sentence 1'][:100]:
+    for sentence in data['Sentence 1']:
         if additional_args:
             formatted_prompt = format_function(sentence, additional_args, few_shots)
         else:

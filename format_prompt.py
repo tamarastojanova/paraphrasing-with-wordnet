@@ -6,19 +6,24 @@ def format_prompt_with_context(
         combination,
         few_shots=None
 ):
-    prompt = ""
+    prompt = (
+        "Please paraphrase the sentence provided below while ensuring that the meaning remains unchanged. "
+        "The paraphrased sentence should be grammatically correct and enclosed in <ANSWER></ANSWER> tags. "
+        "Do not add any explanations or extra text.\n\n"
+    )
 
     if few_shots:
-        prompt += "Here are some examples:\n"
+        prompt += "Here are some examples to guide you:\n"
         for idx, (original, paraphrased) in enumerate(few_shots, start=1):
             prompt += (
-                f"{idx}. Original sentence: '{original}'\n"
-                f"Paraphrased sentence: '{paraphrased}'\n\n"
+                f"{idx}. Example: "
+                f"Original sentence: '{original}', "
+                f"Paraphrased sentence: <ANSWER>{paraphrased}</ANSWER>\n"
             )
 
     context_dict = get_wordnet_context_for_sentence(sentence, combination)
 
-    prompt += "Relevant context:\n"
+    prompt += "Relevant context to help you paraphrase:\n"
 
     for word, context in context_dict.items():
         prompt += f"Word: {word}\n"
@@ -34,28 +39,32 @@ def format_prompt_with_context(
                     prompt += f"- {relation.capitalize()}: {', '.join(values) if values else 'None'}\n"
 
     prompt += (
-        f"Your task is to paraphrase the following sentence: {sentence}. "
-        "Provide the paraphrased sentence enclosed in <ANSWER></ANSWER> tags."
-        "Do not include any explanations, reasoning, or additional text. "
+        f"Original sentence: '{sentence}'\n"
+        "Paraphrased sentence:"
     )
 
     return prompt
 
 
 def format_prompt_without_context(sentence, additional_args=None, few_shots=None):
-    prompt = ""
+    prompt = (
+        "Please paraphrase the sentence provided below while ensuring that the meaning remains unchanged. "
+        "The paraphrased sentence should be grammatically correct and enclosed in <ANSWER></ANSWER> tags. "
+        "Do not add any explanations or extra text.\n\n"
+    )
+
     if few_shots:
-        prompt += "Here are some examples:\n"
+        prompt += "Here are some examples to guide you:\n"
         for idx, (original, paraphrased) in enumerate(few_shots, start=1):
             prompt += (
-                f"{idx}. Original sentence: '{original}'\n"
-                f"Paraphrased sentence: '{paraphrased}'\n\n"
+                f"{idx}. Example: "
+                f"Original sentence: '{original}', "
+                f"Paraphrased sentence: <ANSWER>{paraphrased}</ANSWER>\n"
             )
 
     prompt += (
-        f"Your task is to paraphrase the following sentence: {sentence}. "
-        "Provide the paraphrased sentence enclosed in <ANSWER></ANSWER> tags."
-        "Do not include any explanations, reasoning, or additional text. "
+        f"Original sentence: '{sentence}'\n"
+        "Paraphrased sentence:"
     )
 
     return prompt
