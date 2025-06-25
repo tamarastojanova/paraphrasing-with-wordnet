@@ -30,4 +30,4 @@ def evaluate_model(predictions, references, experiment_name, lang='en'):
     meteor_result = meteor_metric.compute(predictions=predictions, references=references)
 
     print("\n METEOR Score ")
-    print(f"meteor: {meteor_result['meteor']}\n")
+    print(f"meteor: {meteor_result['meteor']}")

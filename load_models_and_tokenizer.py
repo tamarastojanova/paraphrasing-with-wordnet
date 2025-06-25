@@ -1,4 +1,5 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+from sentence_transformers import SentenceTransformer
 import torch
 
 
@@ -22,4 +23,8 @@ def load_model_and_tokenizer():
                                                  quantization_config=quantization_config,
                                                  offload_folder="./offload")
 
-    return model, tokenizer
+    transformer = SentenceTransformer("all-MiniLM-L6-v2")
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    transformer = transformer.to(device)
+
+    return model, transformer, tokenizer
